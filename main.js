@@ -1,5 +1,5 @@
 const timer = {
-    activeTime: 25,
+    pomodoro: 25,
     shortBreak: 5,
     longBreak: 15,
     longBreakInterval: 4,
@@ -17,35 +17,24 @@ function handleMode(event) {
 }
 
 function switchMode(mode) {
+    //Adds two new properties to the timer object
     timer.mode = mode;
     timer.remainingTime = {
         total: timer[mode] * 60,
         minutes: timer[mode],
         seconds: 0,
     }
-}
+    //Active class is removed from all the mode buttons and set on the clicked one
+    document
+        .querySelectorAll('button[data-mode]')
+        .forEach(e => e.classList.remove('active'));
+    document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+    document.body.style.backgroundColor = `var(--${mode})`;
 
-function updateClock(){
-    const {remainingTime } = timer;
-    const minutes = `${remainingTime.minutes}`.padStart(2, '0');
-    const seconds = `${remainingTime.seconds}`.padStart(2, '0');
-
-    const min = document.querySelector('#timer_minutes');
-    const sec = document.querySelector('#timer_seconds');
-
-    min.textContent = minutes;
-    sec.textContent = seconds;
+    updateClock();
 }
 
 let interval;
-
-const startBtn = document.querySelector('#startBtn')
-startBtn.addEventListener('click', () => {
-    // const { action } = start.Btn.dataset;
-    // if (action === 'start') {
-        startTimer();
-    // }
-});
 
 function startTimer() {
     let { total } = timer.remainingTime;
@@ -61,6 +50,30 @@ function startTimer() {
         }
     }, 1000);
 }
+
+function updateClock(){
+    const {remainingTime } = timer;
+                                                //Padding with 00's
+    const minutes = `${remainingTime.minutes}`.padStart(2, '0');
+    const seconds = `${remainingTime.seconds}`.padStart(2, '0');
+
+    const min = document.getElementById('js-minutes');
+    const sec = document.getElementById('js-seconds');
+
+    min.textContent = minutes;
+    sec.textContent = seconds;
+}
+
+
+const mainButton = document.getElementById('js-btn')
+mainButton.addEventListener('click', () => {
+    const { action } = mainButton.dataset;
+    if (action === 'start') {
+        startTimer();
+    }
+});
+
+
 
 function getRemainingTime(endTime) {
     const currentTime = Date.parse(new Date());
