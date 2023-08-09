@@ -5,6 +5,14 @@ const timer = {
     longBreakInterval: 4,
 }
 
+const mainButton = document.getElementById('js-btn')
+mainButton.addEventListener('click', () => {
+    const { action } = mainButton.dataset;
+    if (action === 'start') {
+        startTimer();
+    }
+});
+
 const modeButtons = document.querySelector('#js-mode-buttons');
 modeButtons.addEventListener('click', handleMode);
 
@@ -13,16 +21,16 @@ let interval;
 function getRemainingTime(endTime) {
     const currentTime = Date.parse(new Date());
     const difference = endTime - currentTime;
-
+    //Calculates the time difference to get the remaining time
     const total = Number.parseInt(difference / 100, 10);
-    const minutes = Number.parseInt((total / 60) % 60, 10);
-    const seconds = Number.parseInt(total % 60, 10);
+    const minutes = Number.parseInt((total / 60) % 60, 10); //Modulus operator helps to ignore seconds
+    const seconds = Number.parseInt(total % 60, 10); //Here we only keep the numbers outside the division by 60
 
     return {
         total,
         minutes,
         seconds
-    }
+    };
 }
 
 function startTimer() {
@@ -80,18 +88,6 @@ function handleMode(event) {
     switchMode(mode);
 }
 
-
-
-
-
-
-const mainButton = document.getElementById('js-btn')
-mainButton.addEventListener('click', () => {
-    const { action } = mainButton.dataset;
-    if (action === 'start') {
-        startTimer();
-    }
-});
-
-
-
+document.addEventListener('DOMContentLoaded', () => {
+    switchMode('pomodoro');
+  });
