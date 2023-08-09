@@ -5,24 +5,28 @@ const timer = {
     longBreakInterval: 4,
 }
 
+
+let interval;
+
 const mainButton = document.getElementById('js-btn')
 mainButton.addEventListener('click', () => {
     const { action } = mainButton.dataset;
     if (action === 'start') {
         startTimer();
     }
+    else {
+        stopTimer();
+    }
 });
 
 const modeButtons = document.querySelector('#js-mode-buttons');
 modeButtons.addEventListener('click', handleMode);
 
-let interval;
-
 function getRemainingTime(endTime) {
     const currentTime = Date.parse(new Date());
     const difference = endTime - currentTime;
     //Calculates the time difference to get the remaining time
-    const total = Number.parseInt(difference / 100, 10);
+    const total = Number.parseInt(difference / 1000, 10);
     const minutes = Number.parseInt((total / 60) % 60, 10); //Modulus operator helps to ignore seconds
     const seconds = Number.parseInt(total % 60, 10); //Here we only keep the numbers outside the division by 60
 
@@ -43,6 +47,7 @@ function startTimer() {
 
     interval = setInterval(function () {
         timer.remainingTime = getRemainingTime (endTime);
+        
         updateClock();
 
         total = timer.remainingTime.total;
@@ -52,8 +57,16 @@ function startTimer() {
     }, 1000);
 }
 
+function stopTimer() {
+    clearInterval(interval);
+
+    mainButton.dataset.action = 'start';
+    mainButton.textContent = 'start';
+    mainButton.classList.remove('active');
+}
+
 function updateClock(){
-    const {remainingTime } = timer;           
+    const { remainingTime } = timer;           
     const minutes = `${remainingTime.minutes}`.padStart(2, '0');//Padding with 00's
     const seconds = `${remainingTime.seconds}`.padStart(2, '0');
 
@@ -86,6 +99,7 @@ function handleMode(event) {
     if (!mode) return;
 
     switchMode(mode);
+    stopTimer();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
