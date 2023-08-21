@@ -42,7 +42,7 @@ function startTimer() {
     let { total } = timer.remainingTime;
     const endTime = Date.parse(new Date ()) + total * 1000;
     
-    if (timer.mode ==== 'pomodoro') timer.sessions++; 
+    if (timer.mode === 'pomodoro') timer.sessions++; 
 
     mainButton.dataset.action = 'stop';
     mainButton.textContent = 'stop';
@@ -56,7 +56,7 @@ function startTimer() {
         total = timer.remainingTime.total;
         if (total <= 0) {
             clearInterval(interval);
-        }
+        
 
         //This function switch between modes after the completion of the current mode
             switch (timer.mode) {
@@ -70,6 +70,9 @@ function startTimer() {
                 default:
                     switchMode('pomodoro');
             }
+
+            startTimer();
+        }
     }, 1000);
 }
 
